@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Préstamo Aprobado - BCP</title>
+  
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">WorkCalendar-Nego-Tradicional</div>
+    
+  </header>
+
+  <main class="hero">
+    <div class="loan-card">
+      <h2>¡Esta semana te toca ir presencial!</h2>
+      @if(ifDay) {
+        <h1>LUNES</h1>
+        <h1>CHORRILLOS</h1>
+        <hr />
+        <h1>MIERCOLES</h1>
+        <h1>LA MOLINA</h1>
+      } @else {
+          <h1>LUNES</h1>
+          <h1>LA MOLINA</h1>
+          <hr />
+
+      }
+      @if (ifDay) {
+        <button class="btn primary"(click)="updateWeekActualy()">Semana Actual</button>
+      } @else {
+         
+         <button class="btn primary"(click)="updateWeekNext()">Siguiente semana</button>
+      }
+      
+    </div>
+  </main>
+</body>
+</html>
+<router-outlet />
