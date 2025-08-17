@@ -13,12 +13,12 @@ export class App {
   protected readonly title = signal('workcalendar');
    ifDay: boolean | undefined;
    week: number | undefined;
-   
-   
-
+   lunes:Date | undefined;
+   resultado: string | undefined;
+   nextMonday: Date | undefined;
+   nextWednesday: Date | undefined;
+   nextWednesdayResult: string | undefined;
   constructor() {
-
-
     this.ifDay = false;
     this.updatePage();
   }
@@ -30,6 +30,11 @@ export class App {
     // Determinar si la semana es par o impar
     this.ifDay = esPar(this.week);
     console.log(`Semana actual: ${this.ifDay}`);
+    const hoy = new Date(); // Ej: sábado 16/08/2025
+    this.lunes = this.getMonday(hoy);
+    console.log(`lunes actual: ${ this.lunes}`);
+    this.resultado = this.formatFechaConSeparadores(this.lunes);
+
  }
 updateWeekNext(){
     
@@ -40,6 +45,10 @@ updateWeekNext(){
     // Determinar si la semana es par o impar
     this.ifDay = esPar(this.week+1);
     console.log(`Semana actual: ${this.ifDay}`);
+    this.nextMonday = this.getNextMonday();
+    this.resultado = this.formatFechaConSeparadores(this.nextMonday);
+    this.nextWednesday = this.getNextWednesday();
+    this.nextWednesdayResult = this.formatFechaConSeparadores(this.nextWednesday);
  }
  updateWeekActualy(){
     
@@ -50,7 +59,47 @@ updateWeekNext(){
     // Determinar si la semana es par o impar
     this.ifDay = esPar(this.week);
     console.log(`Semana actual: ${this.ifDay}`);
+    this.updatePage();
  }
+ getMonday(fecha: Date = new Date()): Date {
+  const day = fecha.getDay(); // 0 (domingo) a 6 (sábado)
+  const diff = fecha.getDate() - day + (day === 0 ? -6 : 1); // Ajuste si es domingo
+  return new Date(fecha.setDate(diff));
+}
+formatFechaDDMMYYYY(fecha: Date): string {
+  const dd = String(fecha.getDate()).padStart(2, '0');
+  const mm = String(fecha.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
+  const yyyy = fecha.getFullYear();
+  return `${dd}${mm}${yyyy}`;
+}
+formatFechaConSeparadores(fecha: Date): string {
+  const dd = String(fecha.getDate()).padStart(2, '0');
+  const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+  const yyyy = fecha.getFullYear();
+  return `${dd}/${mm}/${yyyy}`;
+}
+getNextMonday(fecha: Date = new Date()): Date {
+  const day = fecha.getDay(); // 0 (domingo) a 6 (sábado)
+  const diff = fecha.getDate() - day + (day === 0 ? -6 : 1); // lunes de esta semana
+  const mondayThisWeek = new Date(fecha.setDate(diff));
+  
+  // Sumar 7 días para el siguiente lunes
+  const nextMonday = new Date(mondayThisWeek);
+  nextMonday.setDate(mondayThisWeek.getDate() + 7);
+  
+  return nextMonday;
+}
+getNextWednesday(fecha: Date = new Date()): Date {
+  const day = fecha.getDay(); // 0 (domingo) a 6 (sábado)
+  const diffToMonday = fecha.getDate() - day + (day === 0 ? -6 : 1); // lunes de esta semana
+  const mondayThisWeek = new Date(fecha.setDate(diffToMonday));
+
+  // Sumar 9 días para llegar al miércoles de la próxima semana
+  const nextWednesday = new Date(mondayThisWeek);
+  nextWednesday.setDate(mondayThisWeek.getDate() + 9);
+
+  return nextWednesday;
+}
 }
 function getWeekNumber(date: Date): number {
   const tempDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
