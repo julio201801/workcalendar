@@ -18,11 +18,13 @@ export class App {
    nextMonday: Date | undefined;
    nextWednesday: Date | undefined;
    nextWednesdayResult: string | undefined;
+   ifBoton: boolean | undefined;
   constructor() {
     this.ifDay = false;
     this.updatePage();
   }
   updatePage(){
+    this.ifBoton = false;
     const today = new Date();
     this.week = getWeekNumber(today);
     //this.week = 22;
@@ -34,10 +36,12 @@ export class App {
     this.lunes = this.getMonday(hoy);
     console.log(`lunes actual: ${ this.lunes}`);
     this.resultado = this.formatFechaConSeparadores(this.lunes);
+    this.nextWednesday = this.getWednesdayOfThisWeek();
+    this.nextWednesdayResult = this.formatFechaConSeparadores(this.nextWednesday);
 
  }
 updateWeekNext(){
-    
+    this.ifBoton = true;
     const today = new Date();
     this.week = getWeekNumber(today);
     //this.week = 22;
@@ -48,7 +52,9 @@ updateWeekNext(){
     this.nextMonday = this.getNextMonday();
     this.resultado = this.formatFechaConSeparadores(this.nextMonday);
     this.nextWednesday = this.getNextWednesday();
+    this.nextWednesday = this.getWednesdayOfThisWeek();
     this.nextWednesdayResult = this.formatFechaConSeparadores(this.nextWednesday);
+    console.log(`Semana actual: ${this.nextWednesdayResult}`);
  }
  updateWeekActualy(){
     
@@ -100,6 +106,15 @@ getNextWednesday(fecha: Date = new Date()): Date {
 
   return nextWednesday;
 }
+getWednesdayOfThisWeek(): Date {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+  const daysUntilWednesday = (3 - dayOfWeek + 7) % 7; // 3 = miércoles
+  const wednesday = new Date(today);
+  wednesday.setDate(today.getDate() + daysUntilWednesday);
+  return wednesday;
+}
+
 }
 function getWeekNumber(date: Date): number {
   const tempDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
