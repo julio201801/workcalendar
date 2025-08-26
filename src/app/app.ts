@@ -52,7 +52,7 @@ updateWeekNext(){
     this.nextMonday = this.getNextMonday();
     this.resultado = this.formatFechaConSeparadores(this.nextMonday);
     this.nextWednesday = this.getNextWednesday();
-    this.nextWednesday = this.getWednesdayOfThisWeek();
+    //this.nextWednesday = this.getWednesdayOfThisWeek();
     this.nextWednesdayResult = this.formatFechaConSeparadores(this.nextWednesday);
     console.log(`Semana actual: ${this.nextWednesdayResult}`);
  }
